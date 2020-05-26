@@ -1,0 +1,22 @@
+{
+  "name": "posix_spawn",
+  "version": "0.0.0",
+  "description": "Binding to posix_spawn",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jue89/node-posix_spawn.git"
+  },
+  "author": "Juergen Fitschen <me@jue.yt>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/jue89/node-posix_spawn/issues"
+  },
+  "homepage": "https://github.com/jue89/node-posix_spawn#readme",
+  "dependencies": {
+    "nan": "^2.14.1"
+  }
+}
