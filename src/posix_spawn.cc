@@ -19,6 +19,7 @@ static inline int max(int a, int b) {
 class PosixSpawnWorker : public Nan::AsyncWorker {
 private:
 	posix_spawn_file_actions_t actions;
+	posix_spawnattr_t attr;
 	char *cmd;
 	char *stdout_buf, *stderr_buf;
 	size_t stdout_len, stderr_len;
@@ -29,11 +30,13 @@ public:
 	PosixSpawnWorker(Nan::Callback *cb, const char *cmd) : Nan::AsyncWorker(cb) {
 		this->cmd = strdup(cmd);
 		posix_spawn_file_actions_init(&this->actions);
+		posix_spawnattr_init(&this->attr);
 	}
 
 	~PosixSpawnWorker() {
 		free(cmd);
 		posix_spawn_file_actions_destroy(&this->actions);
+		posix_spawnattr_destroy(&this->attr);
 	}
 
 	void Execute () {
@@ -60,8 +63,11 @@ public:
 		posix_spawn_file_actions_adddup2(&this->actions, stderr_pipe[WRITE], STDERR_FILENO);
 		posix_spawn_file_actions_addclose(&this->actions, stderr_pipe[WRITE]);
 
+		// enforce usage of vfork()
+		posix_spawnattr_setflags(&this->attr, POSIX_SPAWN_USEVFORK);
+
 		// spawn child
-		rc = posix_spawnp(&pid, args[0], &this->actions, NULL, args, NULL);
+		rc = posix_spawnp(&pid, args[0], &this->actions, &this->attr, args, NULL);
 		if (rc != 0) {
 			this->SetErrorMessage("Spawn failed");
 			return;
