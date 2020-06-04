@@ -1,6 +1,6 @@
 {
   "name": "posix_spawn",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "description": "Binding to posix_spawn",
   "main": "index.js",
   "scripts": {
